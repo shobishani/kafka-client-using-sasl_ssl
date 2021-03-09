@@ -16,13 +16,13 @@ limitations under the License.
 package com.bfm.kafka;
 
 public interface IKafkaConstants {
-	String KAFKA_BROKERS = "localhost:9092";
+	String KAFKA_BROKERS = "kafka.fgasp.com:443";
 
 	String CLIENT_ID="test-consumer";
 	
-	String TOPIC_NAME="test";
+	String TOPIC_NAME="a_messages";
 	
-	String GROUP_ID_CONFIG="foo";
+	String GROUP_ID_CONFIG="a_messages";
 	
 	Integer MAX_NO_MESSAGE_FOUND_COUNT=100;
 	

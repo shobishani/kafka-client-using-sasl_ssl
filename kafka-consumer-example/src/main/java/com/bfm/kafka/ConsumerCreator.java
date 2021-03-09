@@ -21,6 +21,7 @@ import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.serialization.LongDeserializer;
 import org.apache.kafka.common.serialization.StringDeserializer;
 
+import java.io.File;
 import java.util.Collections;
 import java.util.Properties;
 
@@ -36,20 +37,16 @@ public class ConsumerCreator {
 		props.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, IKafkaConstants.MAX_POLL_RECORDS);
 		props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "false");
 		props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, IKafkaConstants.OFFSET_RESET_EARLIER);
-
-		// OAuth Settings
-		//	- sasl.jaas.config=org.apache.kafka.common.security.oauthbearer.OAuthBearerLoginModule required;
 		props.put("sasl.jaas.config", "org.apache.kafka.common.security.oauthbearer.OAuthBearerLoginModule required;");
-
-		//	- security.protocol=SASL_PLAINTEXT
-		props.put("security.protocol", "SASL_PLAINTEXT");
-
-		//	- sasl.mechanism=OAUTHBEARER
-		props.put("sasl.mechanism", "OAUTHBEARER");
-
-		//	- sasl.login.callback.handler.class=com.bfm.kafka.security.oauthbearer.OAuthAuthenticateLoginCallbackHandler
 		props.put("sasl.login.callback.handler.class", "com.bfm.kafka.security.oauthbearer.OAuthAuthenticateLoginCallbackHandler");
-
+		props.put("sasl.mechanism", "OAUTHBEARER");
+		props.put("security.protocol", "SASL_SSL");
+		props.put("ssl.protocol", "TLSv1.2");
+		props.put("ssl.endpoint.identification.algorithm", "");
+		props.put("ssl.truststore.password", "password");
+		File file = new File("kafka-consumer-example/src/main/resources/truststore.jks");
+		String jksFilePath = file.getAbsolutePath();
+		props.put("ssl.truststore.location", jksFilePath);
 		final Consumer<Long, String> consumer = new KafkaConsumer<>(props);
 		consumer.subscribe(Collections.singletonList(IKafkaConstants.TOPIC_NAME));
 		return consumer;

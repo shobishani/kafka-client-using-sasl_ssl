@@ -21,6 +21,7 @@ import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.LongSerializer;
 import org.apache.kafka.common.serialization.StringSerializer;
 
+import java.io.File;
 import java.util.Properties;
 
 public class ProducerCreator {
@@ -31,20 +32,16 @@ public class ProducerCreator {
 		props.put(ProducerConfig.CLIENT_ID_CONFIG, IKafkaConstants.CLIENT_ID);
 		props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, LongSerializer.class.getName());
 		props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
-
-		// OAuth Settings
-		//	- sasl.jaas.config=org.apache.kafka.common.security.oauthbearer.OAuthBearerLoginModule required;
 		props.put("sasl.jaas.config", "org.apache.kafka.common.security.oauthbearer.OAuthBearerLoginModule required;");
-
-		//	- security.protocol=SASL_PLAINTEXT
-		props.put("security.protocol", "SASL_PLAINTEXT");
-
-		//	- sasl.mechanism=OAUTHBEARER
-		props.put("sasl.mechanism", "OAUTHBEARER");
-
-		//	- sasl.login.callback.handler.class=com.bfm.kafka.security.oauthbearer.OAuthAuthenticateLoginCallbackHandler
 		props.put("sasl.login.callback.handler.class", "com.bfm.kafka.security.oauthbearer.OAuthAuthenticateLoginCallbackHandler");
-
+		props.put("sasl.mechanism", "OAUTHBEARER");
+		props.put("security.protocol", "SASL_SSL");
+		props.put("ssl.protocol", "TLSv1.2");
+		props.put("ssl.endpoint.identification.algorithm", "");
+		props.put("ssl.truststore.password", "password");
+		File file = new File("kafka-producer-example/src/main/resources/truststorespark.jks");
+		String jksFilePath = file.getAbsolutePath();
+		props.put("ssl.truststore.location", jksFilePath);
 		return new KafkaProducer<>(props);
 	}
 }

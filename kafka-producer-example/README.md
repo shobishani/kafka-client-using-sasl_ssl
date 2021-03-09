@@ -64,7 +64,7 @@ limitations under the License.
     
 #### Configure your ENV Variables
         
-    set KAFKA_OAUTH_SERVER_PROP_FILE={PATH_TO_PROJECT}\kafka-producer-example\src\main\resources\oauth-configuration.properties
+    export KAFKA_OAUTH_SERVER_PROP_FILE=/home/shabab/Documents/workspace/java/oauth/kafka-producer-example/src/main/resources/oauth-configuration.properties
     
     
 #### Run the Producer
